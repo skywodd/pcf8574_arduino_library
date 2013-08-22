@@ -25,8 +25,8 @@
 PCF8574::PCF8574() :
 		_PORT(0), _PIN(0), _DDR(0), _address(0)
 #ifdef PCF8574_INTERRUPT_SUPPORT
-				, _oldPIN(0), _pcintPin(0), _intMode( { 0 }), _intCallback(
-				{ 0 })
+				, _oldPIN(0), _pcintPin(0), _intMode(/* { 0 }*/), _intCallback(/*
+				{ 0 }*/)
 #endif
 {
 }
