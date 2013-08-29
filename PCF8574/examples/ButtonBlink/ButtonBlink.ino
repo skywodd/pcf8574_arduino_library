@@ -21,14 +21,14 @@ void setup() {
   /* Setup serial for debug */
   Serial.begin(115200);
   
+  /* Start I2C bus and PCF8574 instance */
+  expander.begin(0x20);
+  
   /* Setup some PCF8574 pins for demo */
   expander.pinMode(0, OUTPUT);
   expander.pinMode(1, OUTPUT);
   expander.pinMode(2, OUTPUT);
   expander.pinMode(3, INPUT_PULLUP);
-
-  /* Start I2C bus and PCF8574 instance */
-  expander.begin(0x20);
   
   /* Enable PCF8574 interrupts, use pin D8 as "INT" pin and ISRgateway() as callback function */
   expander.enableInterrupt(8, ISRgateway);
