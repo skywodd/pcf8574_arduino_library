@@ -36,6 +36,7 @@ void PCF8574::begin(uint8_t address) {
 	/* Store the I2C address and init the Wire library */
 	_address = address;
 	Wire.begin();
+	readGPIO();
 }
 
 void PCF8574::pinMode(uint8_t pin, uint8_t mode) {
@@ -178,7 +179,7 @@ void PCF8574::enableInterrupt(uint8_t pin, void (*selfCheckFunction)(void)) {
 #endif
 
 	/* Attach interrupt handler */
-	PCattachInterrupt(pin, selfCheckFunction, CHANGE);
+	PCattachInterrupt(pin, selfCheckFunction, FALLING);
 }
 
 void PCF8574::disableInterrupt() {
@@ -194,6 +195,7 @@ void PCF8574::checkForInterrupt() {
 
 	/* Read current pins values */
 	readGPIO();
+	cli();
 
 	/* Check all pins */
 	for (uint8_t i = 0; i < 8; ++i) {
@@ -259,7 +261,7 @@ void PCF8574::readGPIO() {
 void PCF8574::updateGPIO() {
 
 	/* Read current GPIO states */
-	//readGPIO();
+	readGPIO();
 
 	/* Compute new GPIO states */
 	uint8_t value = (_PIN & ~_DDR) | _PORT;
