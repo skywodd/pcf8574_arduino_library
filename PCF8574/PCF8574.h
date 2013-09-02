@@ -205,6 +205,9 @@ protected:
 #ifdef PCF8574_INTERRUPT_SUPPORT
 	/** Old value of _PIN variable */
 	volatile uint8_t _oldPIN;
+	
+	/** ISR ignore flag */
+	volatile uint8_t _isrIgnore;
 
 	/** PCINT pin used for "INT" pin handling */
 	uint8_t _pcintPin;

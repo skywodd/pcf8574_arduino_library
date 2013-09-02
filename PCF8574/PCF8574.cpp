@@ -25,8 +25,7 @@
 PCF8574::PCF8574() :
 		_PORT(0), _PIN(0), _DDR(0), _address(0)
 #ifdef PCF8574_INTERRUPT_SUPPORT
-				, _oldPIN(0), _pcintPin(0), _intMode(/* { 0 }*/), _intCallback(/*
-				{ 0 }*/)
+		, _oldPIN(0), _isrIgnore(0), _pcintPin(0), _intMode(), _intCallback()
 #endif
 {
 }
@@ -190,12 +189,17 @@ void PCF8574::disableInterrupt() {
 
 void PCF8574::checkForInterrupt() {
 
+	/* Avoid nested interrupt triggered by I2C read/write */
+	if(_isrIgnore)
+		return;
+	else
+		_isrIgnore = 1;
+		
 	/* Re-enable interrupts to allow Wire library to work */
 	sei();
 
 	/* Read current pins values */
 	readGPIO();
-	cli();
 
 	/* Check all pins */
 	for (uint8_t i = 0; i < 8; ++i) {
@@ -227,6 +231,9 @@ void PCF8574::checkForInterrupt() {
 			break;
 		}
 	}
+	
+	/* Turn off ISR ignore flag */
+	_isrIgnore = 0;
 }
 
 void PCF8574::attachInterrupt(uint8_t pin, void (*userFunc)(void),
@@ -261,9 +268,10 @@ void PCF8574::readGPIO() {
 void PCF8574::updateGPIO() {
 
 	/* Read current GPIO states */
-	readGPIO();
+	//readGPIO(); // Experimental
 
 	/* Compute new GPIO states */
+	//uint8_t value = ((_PIN & ~_DDR) & ~(~_DDR & _PORT)) | _PORT; // Experimental
 	uint8_t value = (_PIN & ~_DDR) | _PORT;
 
 	/* Start communication and send GPIO values as byte */
