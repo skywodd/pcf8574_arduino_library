@@ -117,13 +117,13 @@ uint8_t PCF8574::read() {
 void PCF8574::pullUp(uint8_t pin) {
 
 	/* Same as pinMode(INPUT_PULLUP) */
-	pinMode(pin, INPUT_PULLUP);
+	pinMode(pin, INPUT_PULLUP); // /!\ pinMode form THE LIBRARY
 }
 
 void PCF8574::pullDown(uint8_t pin) {
 
 	/* Same as pinMode(INPUT) */
-	pinMode(pin, INPUT);
+	pinMode(pin, INPUT); // /!\ pinMode form THE LIBRARY
 }
 
 void PCF8574::clear() {
@@ -171,10 +171,10 @@ void PCF8574::enableInterrupt(uint8_t pin, void (*selfCheckFunction)(void)) {
 
 	/* Setup interrupt pin */
 #if ARDUINO >= 100
-	pinMode(pin, INPUT_PULLUP);
+	::pinMode(pin, INPUT_PULLUP); // /!\ pinMode form THE ARDUINO CORE
 #else
-	pinMode(pin, INPUT);
-	digitalWrite(pin, HIGH);
+	::pinMode(pin, INPUT); // /!\ pinMode form THE ARDUINO CORE
+	::digitalWrite(pin, HIGH); // /!\ digitalWrite form THE ARDUINO CORE
 #endif
 
 	/* Attach interrupt handler */
