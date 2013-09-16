@@ -49,8 +49,8 @@ void ISRdemo() {
   /* Blink hardware LED for debug */
   digitalWrite(13, HIGH);  
   
-  /* Blink PCF8574 output 0 (5 times during 500ms) for demo */
-  expander.blink(0, 5, 500);
+  /* Toggle PCF8574 output 0 for demo */
+  expander.toggle();
   
   /* Blink hardware LED for debug */
   digitalWrite(13, LOW);
